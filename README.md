@@ -60,3 +60,23 @@ npm run preview
 - 검증 중 브라우저 JavaScript 런타임 오류 없음
 
 브라우저 검증은 이 클라우드의 Chromium 소프트웨어 렌더링으로 수행했습니다. 실제 PC의 GPU, 다른 브라우저 및 장시간 사용 성능은 별도 확인이 필요합니다.
+
+## GitHub Pages 자동 배포
+
+이 저장소 이름은 `-`이므로 Vite의 `base`는 `/-/`로 설정되어 있습니다. 저장소 이름이나 사용자 정의 도메인이 바뀌면 이 값도 수정해야 합니다.
+
+`.github/workflows/deploy-pages.yml`은 `main`에 코드를 올리거나 수동 실행할 때 Node.js 24로 의존성을 설치하고 빌드한 `dist/`를 GitHub Pages에 배포합니다. 별도의 토큰이나 비밀 키를 등록할 필요가 없습니다.
+
+최초 설정:
+
+1. GitHub 저장소에서 **Settings → Pages**를 엽니다.
+2. **Build and deployment → Source**를 **GitHub Actions**로 선택합니다.
+3. 저장소의 **Actions** 탭을 엽니다. 실행 허용 안내가 있으면 워크플로 실행을 허용합니다.
+4. 왼쪽에서 **GitHub Pages 배포**를 선택합니다.
+5. **Run workflow → Branch: main → Run workflow**를 누릅니다.
+6. 실행 결과에서 빌드와 게시 작업이 모두 초록색인지 확인합니다. 환경 승인 대기가 표시되면 **Review deployments**에서 `github-pages` 배포를 승인합니다.
+7. **Settings → Pages → Visit site** 또는 배포 결과에 표시된 주소를 엽니다.
+
+기본 예상 주소는 `https://bellusnine.github.io/-/`입니다. 실제 주소는 성공한 배포 결과에서 확인하세요. 최초 Pages 설정 전 자동 실행된 작업은 실패할 수 있으므로 위 설정 후 수동 실행하세요. 이후에는 `main` 변경 시 자동 배포됩니다.
+
+GitHub Pages로 게시하면 웹사이트와 빌드에 포함된 정보가 인터넷에 공개됩니다. 현재 데이터는 가상 설비 정보입니다. 실제 고객의 민감한 시설 정보나 비밀 키를 코드에 넣지 마세요. Pages 기능의 사용 가능 여부는 저장소 공개 범위 및 GitHub 요금제에 따라 다릅니다.

@@ -1,0 +1,51 @@
+name: GitHub Pages 배포
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: 웹 프로그램 빌드
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 가져오기
+        uses: actions/checkout@v4
+      - name: Node.js 준비
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: 의존성 설치
+        run: npm ci --no-audit --no-fund
+      - name: Pages 설정 확인
+        uses: actions/configure-pages@v5
+      - name: 프로덕션 빌드
+        run: npm run build
+      - name: 배포 파일 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: GitHub Pages 게시
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 웹사이트 배포
+        id: deployment
+        uses: actions/deploy-pages@v4
